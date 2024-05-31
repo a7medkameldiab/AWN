@@ -1,0 +1,16 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Internal;
+
+namespace AWN.Models
+{
+    public class Account : IdentityUser
+    {
+        public string? DonationNumber { get; set; }
+        public byte[]? Photo { get; set; }
+        public ICollection<DonateCase> donateCases { get; set; }
+        public RequestJoin requestJoins { get; set; }
+        public ICollection<Notification> notifications { get; set; }
+        public ICollection<Suggestion> suggestions { get; set; }  
+        public List<Payment> payments { get; set; }
+    }
+}
