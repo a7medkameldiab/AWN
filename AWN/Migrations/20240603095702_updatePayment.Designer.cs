@@ -4,6 +4,7 @@ using AWN.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AWN.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240603095702_updatePayment")]
+    partial class updatePayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,9 +208,6 @@ namespace AWN.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<int>("DonateCaseId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
@@ -220,8 +219,6 @@ namespace AWN.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("DonateCaseId");
 
                     b.ToTable("payments", "AwnSc");
                 });
@@ -507,15 +504,7 @@ namespace AWN.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AWN.Models.DonateCase", "DonateCase")
-                        .WithMany("Payments")
-                        .HasForeignKey("DonateCaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("DonateCase");
                 });
 
             modelBuilder.Entity("AWN.Models.Photos", b =>
@@ -614,8 +603,6 @@ namespace AWN.Migrations
 
             modelBuilder.Entity("AWN.Models.DonateCase", b =>
                 {
-                    b.Navigation("Payments");
-
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

@@ -36,6 +36,7 @@ namespace AWN.Models
         public DonateCaseState State { get; set; } = DonateCaseState.InProgress;
         public DateTime TimesTamp {  get; set; }
         public ICollection<Photos> Photos { get; set; }  = new List<Photos>();
-        public ICollection<Account> accounts { get; set; } 
+        public ICollection<Account> accounts { get; set; }
+        public ICollection<Payment> Payments { get; set; }
     }
 }

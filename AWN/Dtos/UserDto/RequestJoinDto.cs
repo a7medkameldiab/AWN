@@ -13,6 +13,5 @@ namespace AWN.Dtos.UserDto
         public string PhoneNumber { get; set; }
         [MaxLength(100)]
         public string ReasonOfJoin { get; set; }
-        public string AccountId { get; set; }
     }
 }

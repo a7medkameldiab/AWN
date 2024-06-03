@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AWN.Controllers
 {
@@ -21,22 +22,23 @@ namespace AWN.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
+        [HttpPost("send-request-join")]
         public async Task<IActionResult> SendRequestJoinAsync([FromBody] RequestJoinDto dto)
         {
+            var userId = User.FindFirst("uid").Value;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.FindByIdAsync(dto.AccountId);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user is null)
                 return NotFound("This Id Is Not Found !");
 
             var requestJoin = new RequestJoin
             {
-                AccountId = dto.AccountId,
                 Name = dto.Name,
                 Governorate = dto.Governorate,
                 City = dto.City,
@@ -44,22 +46,45 @@ namespace AWN.Controllers
                 ReasonOfJoin = dto.ReasonOfJoin
             };
 
+            await _context.SaveChangesAsync();
+            user.requestJoins = requestJoin;
+
             await _context.requestJoins.AddAsync(requestJoin);
             await _context.SaveChangesAsync();
 
-            return Ok(new
-            {
-                Id = requestJoin.AccountId,
-                Name = requestJoin.Name,
-                Governorate = requestJoin.Governorate,
-                City = requestJoin.City,
-                PhoneNumber = requestJoin.PhoneNumber,
-                ReasonOfJoin = requestJoin.ReasonOfJoin
-            });
+            return Ok("Success");
         }
 
-        
+        [HttpPost("suggest-case")]
+        public async Task<IActionResult> MakeSuggestionAsync([FromBody] SuggestionDto dto)
+        {
+            var userId = User.FindFirst("uid").Value;
 
-        
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var suggestion = new Suggestion
+            {
+                Details = dto.Details,
+                Address = dto.Address,
+                PhoneNumber = dto.PhoneNumber,
+            };
+
+            await _context.SaveChangesAsync();
+            user.suggestions = new List<Suggestion>(){suggestion};
+
+            await _context.suggestions.AddAsync(suggestion);
+            await _context.SaveChangesAsync();
+
+            return Ok("Success");
+        }
+
     }
 }

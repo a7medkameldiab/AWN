@@ -254,3 +254,4 @@ E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\net6.0\Sy
 E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+E:\Grinta\Graduation Project\AWN\AWN\obj\Debug\net6.0\AWN.sourcelink.json

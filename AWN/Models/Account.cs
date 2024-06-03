@@ -10,7 +10,7 @@ namespace AWN.Models
         public ICollection<DonateCase> donateCases { get; set; }
         public RequestJoin requestJoins { get; set; }
         public ICollection<Notification> notifications { get; set; }
-        public ICollection<Suggestion> suggestions { get; set; }  
+        public List<Suggestion> suggestions { get; set; }  
         public List<Payment> payments { get; set; }
     }
 }

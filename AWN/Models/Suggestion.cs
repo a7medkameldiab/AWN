@@ -16,6 +16,7 @@ namespace AWN.Models
         public string PhoneNumber { get; set; }
         public SuggestionSort Sort { get; set; }
         public bool IsAccepted { get; set; } = false;
-        public ICollection<Account> Accounts { get; set; }
+        public string AccountId { get; set; }   
+        public Account Account { get; set; }
     }
 }

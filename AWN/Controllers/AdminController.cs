@@ -10,25 +10,34 @@ using Newtonsoft.Json.Linq;
 
 namespace AWN.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Owner")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Account> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, UserManager<Account> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpPost("add-case")]
         public async Task<IActionResult> AddCaseAsync([FromForm] CreateCaseDto dto)
         {
+            var userId = User.FindFirst("uid").Value;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
 
             var donateCase = new DonateCase
             {
@@ -40,6 +49,9 @@ namespace AWN.Controllers
                 Location = dto.Location,
                 TimesTamp = DateTime.Now
             };
+
+            await _context.SaveChangesAsync();
+            user.donateCases = new List<DonateCase>(){donateCase};
 
             var photos = new List<Photos>();
 
@@ -68,27 +80,52 @@ namespace AWN.Controllers
             return Ok($"Case {donateCase.Id} : {donateCase.Title} => Added Successfully");
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCaseAsync(int id, [FromForm] CreateCaseDto dto)
+        [HttpPut("update-case/{id}")]
+        public async Task<IActionResult> UpdateCaseAsync(int id, [FromForm] UpdateCaseDto dto)
         {
+            var userId = User.FindFirst("uid").Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var donateCase = await _context.donateCases.Include(c => c.Photos).FirstOrDefaultAsync(c => c.Id == id);
+            var donateCase = await _context.donateCases
+                .Include(c => c.Photos)
+                .SingleOrDefaultAsync(c => c.Id == id);
+
             if (donateCase == null)
             {
                 return NotFound("Case not found");
             }
-
-            donateCase.Title = dto.Title;
-            donateCase.SubTitle = dto.SubTitle;
-            donateCase.CurrentAmount = dto.CurrentAmount;
-            donateCase.TargetAmount = dto.TargetAmount;
-            donateCase.State = dto.State;
-            donateCase.Location = dto.Location;
-            donateCase.TimesTamp = DateTime.Now;
+            if(dto.Title is not null)
+            {
+                donateCase.Title = dto.Title;
+            }
+            if(dto.SubTitle is not null)
+            {
+                donateCase.SubTitle = dto.SubTitle;
+            }
+            if(dto.CurrentAmount is not null)
+            {
+                donateCase.CurrentAmount = (double)dto.CurrentAmount;
+            }
+            if(dto.TargetAmount is not null)
+            {
+                donateCase.TargetAmount = (double)dto.TargetAmount;
+            }
+            if(dto.State is not null)
+            {
+                donateCase.State = (DonateCaseState)dto.State;
+            }
+            if(dto.Location is not null)
+            {
+                donateCase.Location = dto.Location;
+            }
 
             if (dto.Photos != null && dto.Photos.Count > 0)
             {
@@ -119,14 +156,7 @@ namespace AWN.Controllers
             _context.donateCases.Update(donateCase);
             await _context.SaveChangesAsync();
 
-            return Ok(new
-            {
-                donateCase.Title,
-                donateCase.Location,
-                donateCase.TargetAmount,
-                CountOfPhotos = donateCase.Photos.Count,
-                donateCase.State,
-            });
+            return Ok("Success");
         }
 
 

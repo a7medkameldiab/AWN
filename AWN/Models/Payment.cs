@@ -13,5 +13,7 @@
         public PaymentMethod PaymentMethod { get; set;} = PaymentMethod.Cash;
         public string AccountId { get; set; }
         public Account Account { get; set; }
+        public int DonateCaseId { get; set; }
+        public DonateCase DonateCase { get; set; }
     }
 }

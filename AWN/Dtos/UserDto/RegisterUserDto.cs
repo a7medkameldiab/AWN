@@ -12,6 +12,5 @@ namespace AWN.Dtos.UserDto
         public string Email { get; set; }
         [StringLength(20)]
         public string PhoneNumber { get; set; }
-
     }
 }

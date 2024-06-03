@@ -14,6 +14,7 @@ namespace AWN.Models
         public DbSet<RequestJoin> requestJoins { get; set; }
         public DbSet<Notification> notifications { get; set; }
         public DbSet<Suggestion> suggestions { get; set; }
+        public DbSet<Payment> payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
