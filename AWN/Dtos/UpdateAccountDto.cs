@@ -13,5 +13,6 @@ namespace AWN.Dtos
         [StringLength(20)]
         public string? PhoneNumber { get; set; }
         public IFormFile? Photo { get; set; }
+        public string? DonationNumber { get; set; }
     }
 }

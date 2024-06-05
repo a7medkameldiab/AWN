@@ -113,6 +113,12 @@ namespace AWN.Controllers
                 return BadRequest(ModelState);
             }
 
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+            {
+                return NotFound("This Id Is Not Found !");
+            }
+
             var donateCase = await _context.donateCases
                 .Include(c => c.Photos)
                 .SingleOrDefaultAsync(c => c.Id == id);
@@ -170,6 +176,29 @@ namespace AWN.Controllers
                     }
                 }
                 donateCase.Photos = photos;
+            }
+
+            if (donateCase.State is DonateCaseState.Done)
+            {
+
+                // Create and send notification to all accounts
+                var notification = new Notification
+                {
+                    Content = $"The donate case '{donateCase.Title}' has reached its target and is now done.",
+                    IsRead = false,
+                    TimesTamp = DateTime.Now
+                };
+
+                await _context.SaveChangesAsync();
+
+                var accounts = _userManager.Users.ToList();
+                foreach (var account in accounts)
+                {
+                    user.notifications = new List<Notification>() { notification };
+                }
+
+                _context.notifications.Add(notification);
+                await _context.SaveChangesAsync();
             }
 
             _context.donateCases.Update(donateCase);

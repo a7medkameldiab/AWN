@@ -3,33 +3,8 @@
   "WorkspaceRootPath": "E:\\Grinta\\Graduation Project\\AWN\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|e:\\grinta\\graduation project\\awn\\awn\\controllers\\generalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|solutionrelative:awn\\controllers\\generalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|e:\\grinta\\graduation project\\awn\\awn\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|solutionrelative:awn\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__ProjectModels/AWN/True/SqlTable/AwnSc.AccountNotification.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__ProjectModels/AWN/True/SqlTable/AwnSc.notifications.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|e:\\grinta\\graduation project\\awn\\awn\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|solutionrelative:awn\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__ProjectModels/AWN/True/SqlTable/AwnSc.donateCases.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|e:\\grinta\\graduation project\\awn\\awn\\models\\donatecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|solutionrelative:awn\\models\\donatecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|e:\\grinta\\graduation project\\awn\\awn\\dtos\\admindto\\createcasedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|solutionrelative:awn\\dtos\\admindto\\createcasedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|e:\\grinta\\graduation project\\awn\\awn\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E6E0BE09-5EF7-41A7-A192-325612419DA0}|AWN\\AWN.csproj|solutionrelative:awn\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -39,101 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Account.cs",
-              "DocumentMoniker": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Models\\Account.cs",
-              "RelativeDocumentMoniker": "AWN\\Models\\Account.cs",
-              "ToolTip": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Models\\Account.cs",
-              "RelativeToolTip": "AWN\\Models\\Account.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAABEAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-05T11:18:46.683Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AwnSc.AccountNotification [Data]",
-              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__ProjectModels/AWN/True/SqlTable/AwnSc.AccountNotification.sql",
-              "ToolTip": "AwnSc.AccountNotification [Data]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-06-05T11:10:07.766Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AwnSc.notifications [Data]",
-              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__ProjectModels/AWN/True/SqlTable/AwnSc.notifications.sql",
-              "ToolTip": "AwnSc.notifications [Data]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-06-05T11:09:40.215Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "AWN\\Controllers\\AdminController.cs",
-              "ToolTip": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "AWN\\Controllers\\AdminController.cs",
-              "ViewState": "AQIAAG8AAAAAAAAAAAAgwFIAAABWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-05T01:25:43.881Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DonateCase.cs",
-              "DocumentMoniker": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Models\\DonateCase.cs",
-              "RelativeDocumentMoniker": "AWN\\Models\\DonateCase.cs",
-              "ToolTip": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Models\\DonateCase.cs",
-              "RelativeToolTip": "AWN\\Models\\DonateCase.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T13:48:17.718Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AwnSc.donateCases [Data]",
-              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__ProjectModels/AWN/True/SqlTable/AwnSc.donateCases.sql",
-              "ToolTip": "AwnSc.donateCases [Data]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2024-06-03T13:47:44.458Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CreateCaseDto.cs",
-              "DocumentMoniker": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Dtos\\AdminDto\\CreateCaseDto.cs",
-              "RelativeDocumentMoniker": "AWN\\Dtos\\AdminDto\\CreateCaseDto.cs",
-              "ToolTip": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Dtos\\AdminDto\\CreateCaseDto.cs",
-              "RelativeToolTip": "AWN\\Dtos\\AdminDto\\CreateCaseDto.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAASAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T13:41:40.488Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GeneralController.cs",
-              "DocumentMoniker": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Controllers\\GeneralController.cs",
-              "RelativeDocumentMoniker": "AWN\\Controllers\\GeneralController.cs",
-              "ToolTip": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\Controllers\\GeneralController.cs",
-              "RelativeToolTip": "AWN\\Controllers\\GeneralController.cs",
-              "ViewState": "AQIAAEMAAAAAAAAAAAAwwFQAAAAiAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T13:30:51.771Z",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\appsettings.json",
+              "RelativeDocumentMoniker": "AWN\\appsettings.json",
+              "ToolTip": "E:\\Grinta\\Graduation Project\\AWN\\AWN\\appsettings.json",
+              "RelativeToolTip": "AWN\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-05T14:42:13.589Z",
               "EditorCaption": ""
             }
           ]

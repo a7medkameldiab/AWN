@@ -106,6 +106,10 @@ namespace AWN.Controllers
             {
                 account.Email = model.Email;
             }
+            if (model.DonationNumber is not null)
+            {
+                account.DonationNumber = model.DonationNumber;
+            }
             if (model.Photo is not null)
             {
                 using var dataStream = new MemoryStream();
@@ -226,5 +230,26 @@ namespace AWN.Controllers
 
             return Ok("Notification is deleted successfully");
         }
+
+        [Authorize(Roles = "User")]
+        [HttpDelete("delete-user/{email}")]
+        public async Task<IActionResult> DeleteUser(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user is null)
+                return NotFound("This Email Is Not Found !");
+
+            if (await _userManager.IsInRoleAsync(user, "User"))
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                    return Ok(new { Result = "User Deleted Successfully" });
+
+                return BadRequest(result.Errors);
+            }
+
+            return BadRequest("User is not assign.");
+        }
+
     }
 }
