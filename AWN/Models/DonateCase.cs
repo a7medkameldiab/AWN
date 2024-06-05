@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AWN.Models
 {
@@ -38,5 +39,8 @@ namespace AWN.Models
         public ICollection<Photos> Photos { get; set; }  = new List<Photos>();
         public ICollection<Account> accounts { get; set; }
         public ICollection<Payment> Payments { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public double ExcessAmount { get;  set; }
     }
 }

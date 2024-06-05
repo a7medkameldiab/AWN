@@ -47,9 +47,13 @@ namespace AWN.Models
                .HasForeignKey<RequestJoin>(r => r.AccountId);
 
             modelBuilder.Entity<Account>()
-            .HasMany(a => a.payments)
-            .WithOne(p => p.Account)
-            .HasForeignKey(p => p.AccountId);
+                .HasMany(a => a.payments)
+                .WithOne(p => p.Account)
+                .HasForeignKey(p => p.AccountId);
+
+            modelBuilder.Entity<DonateCase>()
+               .Property(dc => dc.ExcessAmount)
+               .HasComputedColumnSql("CASE WHEN [CurrentAmount] <= [TargetAmount] THEN 0 ELSE [CurrentAmount] - [TargetAmount] END");
         }   
     }
 }

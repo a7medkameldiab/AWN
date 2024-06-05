@@ -61,11 +61,12 @@ namespace AWN.Services
             return new AuthModel
             {
                 Email = account.Email,
+                UserName = account.UserName,
+                PhoneNumber = account.PhoneNumber,
                 ExpireOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                UserName = account.UserName
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken)
             };
         }
 
@@ -87,6 +88,7 @@ namespace AWN.Services
             authModel.ExpireOn = jwtSecurityToken.ValidTo;
             authModel.UserName = user.UserName;
             authModel.Email = user.Email;
+            authModel.PhoneNumber = user.PhoneNumber;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.IsAuthenticated = true;
             authModel.Roles = roleList.ToList();

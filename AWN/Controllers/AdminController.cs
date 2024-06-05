@@ -77,6 +77,25 @@ namespace AWN.Controllers
             _context.donateCases.Add(donateCase);
             await _context.SaveChangesAsync();
 
+            // Create and send notification to all accounts
+            var notification = new Notification
+            {
+                Content = $"A new donate case '{donateCase.Title}' has been created.",
+                IsRead = false,
+                TimesTamp = DateTime.Now
+            };
+
+            await _context.SaveChangesAsync();
+
+            var accounts = _userManager.Users.ToList();
+            foreach (var account in accounts)
+            {
+                user.notifications = new List<Notification>() { notification };
+            }
+
+            _context.notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
             return Ok($"Case {donateCase.Id} : {donateCase.Title} => Added Successfully");
         }
 
@@ -158,8 +177,5 @@ namespace AWN.Controllers
 
             return Ok("Success");
         }
-
-
-
     }
 }

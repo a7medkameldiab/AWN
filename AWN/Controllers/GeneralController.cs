@@ -23,9 +23,68 @@ namespace AWN.Controllers
             _userManager = userManager;
         }
 
-        [HttpPut("updateAccount")]
-        public async Task<IActionResult> UpdateAccountAsync([FromBody] UpdateAccountDto model)
+        [HttpGet("done-case")]
+        public async Task<IActionResult> GetDoneDonateCases()
         {
+            var doneCases = await _context.donateCases
+                .Where(dc => dc.State == DonateCaseState.Done)
+                .Select(dc => new DonateCase
+                {
+                    Id = dc.Id,
+                    Title = dc.Title,
+                    SubTitle = dc.SubTitle,
+                    TargetAmount = dc.TargetAmount,
+                    CurrentAmount = dc.CurrentAmount,
+                    State = dc.State,
+                    Location = dc.Location,
+                    TimesTamp = dc.TimesTamp,
+                    ExcessAmount = dc.ExcessAmount
+                })
+                .ToListAsync();
+
+            return Ok(doneCases);
+        }
+        [HttpGet("inprogress-case")]
+        public async Task<IActionResult> GetInProgressDonateCases()
+        {
+            var inProgressCases = await _context.donateCases
+                .Where(dc => dc.State == DonateCaseState.InProgress)
+                .Select(dc => new DonateCase
+                {
+                    Id = dc.Id,
+                    Title = dc.Title,
+                    SubTitle = dc.SubTitle,
+                    TargetAmount = dc.TargetAmount,
+                    CurrentAmount = dc.CurrentAmount,
+                    State = dc.State,
+                    Location = dc.Location,
+                    TimesTamp = dc.TimesTamp,
+                    ExcessAmount = dc.ExcessAmount
+                })
+                .ToListAsync();
+
+            return Ok(inProgressCases);
+        }
+
+        [HttpGet("notification")]
+        public async Task<IActionResult> GetAllNotifications()
+        {
+            var notifications = await _context.notifications
+                .Select(n => new Notification
+                {
+                    Id = n.Id,
+                    IsRead = n.IsRead,
+                    Content = n.Content,
+                    TimesTamp = n.TimesTamp
+                })
+                .ToListAsync();
+
+            return Ok(notifications);
+        }
+
+        [HttpPut("updateAccount")]
+          public async Task<IActionResult> UpdateAccountAsync([FromBody] UpdateAccountDto model)
+          {
             var userId = User.FindFirst("uid").Value;
 
             // Find the user by ID
@@ -150,6 +209,22 @@ namespace AWN.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Payment processed successfully.", CurrentAmount = donateCase.CurrentAmount, State = donateCase.State });
+        }
+
+        [HttpDelete("delete-notification/{id}")]
+        public async Task<IActionResult> DeleteNotificationAsync(int  id)
+        {
+            var notification = await _context.notifications.FindAsync(id);
+
+            if (notification == null)
+            {
+                return NotFound("Notification not found");
+            }
+
+            _context.notifications.Remove(notification);
+            await _context.SaveChangesAsync();
+
+            return Ok("Notification is deleted successfully");
         }
     }
 }
