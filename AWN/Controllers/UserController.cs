@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace AWN.Controllers
@@ -75,6 +76,7 @@ namespace AWN.Controllers
                 Details = dto.Details,
                 Address = dto.Address,
                 PhoneNumber = dto.PhoneNumber,
+                Sort = SuggestionSort.SuggestCase
             };
 
             await _context.SaveChangesAsync();
@@ -86,5 +88,35 @@ namespace AWN.Controllers
             return Ok("Success");
         }
 
+        [HttpPost("support")]
+        public async Task<IActionResult> SupportAsync([FromBody] SupportDto dto)
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var support = new Support
+            {
+                Name = dto.Name,
+                Problem = dto.Problem,
+                PhoneNumber = dto.PhoneNumber
+            };
+
+            await _context.SaveChangesAsync();
+            user.support = new List<Support>() { support };
+
+            await _context.supports.AddAsync(support);
+            await _context.SaveChangesAsync();
+
+            return Ok("Success");
+        }
     }
 }

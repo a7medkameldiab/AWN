@@ -4,24 +4,27 @@
 
 namespace AWN.Migrations
 {
-    public partial class SeedRoles : Migration
+    public partial class dataSeeding : Migration
     {
-            protected override void Up(MigrationBuilder migrationBuilder)
+        protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
-                 table: "AspNetRoles",
-                 columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
-                 values: new object[] { Guid.NewGuid().ToString(), "User", "User".ToUpper(), Guid.NewGuid().ToString() }
-            );
+                table: "Roles",
+                schema: "AwnSc",
+                columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
+                values: new object[] { Guid.NewGuid().ToString(), "User", "User".ToUpper(), Guid.NewGuid().ToString() }
+           );
 
             migrationBuilder.InsertData(
-                 table: "AspNetRoles",
+                 table: "Roles",
+                 schema: "AwnSc",
                  columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
                  values: new object[] { Guid.NewGuid().ToString(), "Admin", "Admin".ToUpper(), Guid.NewGuid().ToString() }
             );
 
             migrationBuilder.InsertData(
-                 table: "AspNetRoles",
+                 table: "Roles",
+                 schema: "AwnSc",
                  columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
                  values: new object[] { Guid.NewGuid().ToString(), "Owner", "Owner".ToUpper(), Guid.NewGuid().ToString() }
             );
@@ -29,7 +32,7 @@ namespace AWN.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DELETE FROM [AspNetRoles]");
+            migrationBuilder.Sql("DELETE FROM [AwnSc.Roles]");
         }
     }
 }

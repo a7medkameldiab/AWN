@@ -24,6 +24,166 @@ namespace AWN.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet("supports")]
+        public async Task<IActionResult> GetAllSupportsAsync()
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var supports = await _context.supports.ToListAsync();
+
+            if(supports is null)
+            {
+                return NotFound("No supports attended !");
+            }
+
+            return Ok(supports);
+        }
+
+        [HttpGet("request-join")]
+        public async Task<IActionResult> GetAllRequestsAsync()
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var reqeustJoin = await _context.supports.ToListAsync();
+
+            if (reqeustJoin is null)
+            {
+                return NotFound("No Reqeusts attended !");
+            }
+
+            return Ok(reqeustJoin);
+        }
+
+        [HttpGet("suggest-cases")]
+        public async Task<IActionResult> GetAllSuggesCasesAsync()
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var suggestions = await _context.suggestions
+                .Where(d => d.Sort == SuggestionSort.SuggestCase)
+                .Select(d => new
+                {
+                    d.PhoneNumber,
+                    d.Address,
+                    d.Details,
+                    d.AccountId
+                })
+                .ToListAsync();
+
+            if (suggestions == null || suggestions.Count == 0)
+            {
+                return NotFound("No suggest cases attended !");
+            }
+
+            return Ok(suggestions);
+        }
+        
+        [HttpGet("donates-others")]
+        public async Task<IActionResult> GetAllDonateOthersAsync()
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var donateOthers = await _context.suggestions
+                .Where(d => d.Sort == SuggestionSort.DonateOtherThanMoney)
+                .Select(d => new
+                {
+                    d.PhoneNumber,
+                    d.Address,
+                    d.Details,
+                    d.AccountId
+                })
+                .ToListAsync();
+
+            if (donateOthers == null || donateOthers.Count == 0)
+            {
+                return NotFound("No donate others cases attended !");
+            }
+
+            return Ok(donateOthers);
+        }
+
+        [HttpGet("collected-case")]
+        public async Task<IActionResult> GetCollectedDonateCases()
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var collectedCases = await _context.donateCases
+                .Where(dc => dc.State == DonateCaseState.Collected)
+                .Select(dc => new 
+                {
+                    dc.Id,
+                    dc.Title,
+                    dc.SubTitle,
+                    dc.TargetAmount,
+                    dc.CurrentAmount,
+                    dc.State,
+                    dc.Location,
+                    dc.TimesTamp,
+                    dc.ExcessAmount,
+                    dc.Category,
+                    Photos = dc.Photos.Select(p => new
+                    {
+                        p.Photo
+                    }).ToList(),
+                    AccountCount = dc.Payments.Select(p => p.AccountId).Distinct().Count(),
+                    PaymentCount = dc.Payments.Count(),
+                    PaymentSum = dc.Payments.Sum(p => p.Amount)
+                })
+                .ToListAsync();
+
+            return Ok(collectedCases);
+        }
+
         [HttpPost("add-case")]
         public async Task<IActionResult> AddCaseAsync([FromForm] CreateCaseDto dto)
         {
@@ -47,6 +207,7 @@ namespace AWN.Controllers
                 TargetAmount = dto.TargetAmount,
                 State = dto.State,
                 Location = dto.Location,
+                Category = dto.Category,
                 TimesTamp = DateTime.Now
             };
 
@@ -150,6 +311,10 @@ namespace AWN.Controllers
             if(dto.Location is not null)
             {
                 donateCase.Location = dto.Location;
+            } 
+            if(dto.Category is not null)
+            {
+                donateCase.Category = dto.Category;
             }
 
             if (dto.Photos != null && dto.Photos.Count > 0)

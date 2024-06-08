@@ -23,22 +23,80 @@ namespace AWN.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet("payments/{accountId}")]
+        public async Task<IActionResult> GetAllPaymentAsync(string accountId)
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
+            var account = await _context.Users
+                .Include(a => a.payments)
+                .ThenInclude(a => a.DonateCase)
+                .FirstOrDefaultAsync(a => a.Id == accountId);
+
+            if (account == null)
+            {
+                return NotFound("Account not found");
+            }
+
+            var payments = account.payments.Select(p => new
+            {
+                p.Amount,
+                p.DonateCaseId,
+                p.DonateCase.Title,
+                p.DonateCase.SubTitle,
+                p.DonateCase.State,
+                p.TimesTamp
+            });
+
+            return Ok(payments);
+        }
+
         [HttpGet("done-case")]
         public async Task<IActionResult> GetDoneDonateCases()
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
             var doneCases = await _context.donateCases
                 .Where(dc => dc.State == DonateCaseState.Done)
-                .Select(dc => new DonateCase
+                .Select(dc => new 
                 {
-                    Id = dc.Id,
-                    Title = dc.Title,
-                    SubTitle = dc.SubTitle,
-                    TargetAmount = dc.TargetAmount,
-                    CurrentAmount = dc.CurrentAmount,
-                    State = dc.State,
-                    Location = dc.Location,
-                    TimesTamp = dc.TimesTamp,
-                    ExcessAmount = dc.ExcessAmount
+                    dc.Id,
+                    dc.Title,
+                    dc.SubTitle,
+                    dc.TargetAmount,
+                    dc.CurrentAmount,
+                    dc.State,
+                    dc.Location,
+                    dc.TimesTamp,
+                    dc.ExcessAmount,
+                    dc.Category,
+                    Photos = dc.Photos.Select(p => new
+                    {
+                        p.Photo
+                    }).ToList(),
+                    AccountCount = dc.Payments.Select(p => p.AccountId).Distinct().Count(),
+                    PaymentCount = dc.Payments.Count(),
+                    PaymentSum = dc.Payments.Sum(p => p.Amount)
                 })
                 .ToListAsync();
 
@@ -47,21 +105,41 @@ namespace AWN.Controllers
         [HttpGet("inprogress-case")]
         public async Task<IActionResult> GetInProgressDonateCases()
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
             var inProgressCases = await _context.donateCases
-                .Where(dc => dc.State == DonateCaseState.InProgress)
-                .Select(dc => new DonateCase
-                {
-                    Id = dc.Id,
-                    Title = dc.Title,
-                    SubTitle = dc.SubTitle,
-                    TargetAmount = dc.TargetAmount,
-                    CurrentAmount = dc.CurrentAmount,
-                    State = dc.State,
-                    Location = dc.Location,
-                    TimesTamp = dc.TimesTamp,
-                    ExcessAmount = dc.ExcessAmount
-                })
-                .ToListAsync();
+              .Where(dc => dc.State == DonateCaseState.InProgress)
+              .Select(dc => new
+              {
+                  dc.Id,
+                  dc.Title,
+                  dc.SubTitle,
+                  dc.TargetAmount,
+                  dc.CurrentAmount,
+                  dc.State,
+                  dc.Location,
+                  dc.TimesTamp,
+                  dc.ExcessAmount,
+                  dc.Category,
+                  Photos = dc.Photos.Select(p => new
+                  {
+                      p.Photo
+                  }).ToList(),
+                  AccountCount = dc.Payments.Select(p => p.AccountId).Distinct().Count(),
+                  PaymentCount = dc.Payments.Count(),
+                  PaymentSum = dc.Payments.Sum(p => p.Amount)
+              })
+              .ToListAsync();
 
             return Ok(inProgressCases);
         }
@@ -69,6 +147,18 @@ namespace AWN.Controllers
         [HttpGet("notification")]
         public async Task<IActionResult> GetAllNotifications()
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
             var notifications = await _context.notifications
                 .Select(n => new Notification
                 {
@@ -83,7 +173,7 @@ namespace AWN.Controllers
         }
 
         [HttpPut("updateAccount")]
-          public async Task<IActionResult> UpdateAccountAsync([FromBody] UpdateAccountDto model)
+          public async Task<IActionResult> UpdateAccountAsync([FromForm] UpdateAccountDto model)
           {
             var userId = User.FindFirst("uid").Value;
 
@@ -156,6 +246,7 @@ namespace AWN.Controllers
                 Details = dto.Details,
                 Address = dto.Address,
                 PhoneNumber = dto.PhoneNumber,
+                Sort = SuggestionSort.DonateOtherThanMoney
             };
 
             await _context.SaveChangesAsync();
@@ -218,6 +309,18 @@ namespace AWN.Controllers
         [HttpDelete("delete-notification/{id}")]
         public async Task<IActionResult> DeleteNotificationAsync(int  id)
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+                return NotFound("This Id Is Not Found !");
+
             var notification = await _context.notifications.FindAsync(id);
 
             if (notification == null)
@@ -231,10 +334,21 @@ namespace AWN.Controllers
             return Ok("Notification is deleted successfully");
         }
 
-        [Authorize(Roles = "User")]
         [HttpDelete("delete-user/{email}")]
         public async Task<IActionResult> DeleteUser(string email)
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userI = await _userManager.FindByIdAsync(userId);
+
+            if (userI is null)
+                return NotFound("This Id Is Not Found !");
+
             var user = await _userManager.FindByEmailAsync(email);
             if (user is null)
                 return NotFound("This Email Is Not Found !");

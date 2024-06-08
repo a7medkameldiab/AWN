@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AWN.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240603095702_updatePayment")]
-    partial class updatePayment
+    [Migration("20240606215700_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -134,8 +134,17 @@ namespace AWN.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("CurrentAmount")
                         .HasColumnType("float");
+
+                    b.Property<double>("ExcessAmount")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("float")
+                        .HasComputedColumnSql("CASE WHEN [CurrentAmount] <= [TargetAmount] THEN 0 ELSE [CurrentAmount] - [TargetAmount] END");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -208,6 +217,9 @@ namespace AWN.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<int>("DonateCaseId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
@@ -219,6 +231,8 @@ namespace AWN.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("DonateCaseId");
 
                     b.ToTable("payments", "AwnSc");
                 });
@@ -331,6 +345,37 @@ namespace AWN.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("suggestions", "AwnSc");
+                });
+
+            modelBuilder.Entity("AWN.Models.Support", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Problem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Support", "AwnSc");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -504,7 +549,15 @@ namespace AWN.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AWN.Models.DonateCase", "DonateCase")
+                        .WithMany("Payments")
+                        .HasForeignKey("DonateCaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("DonateCase");
                 });
 
             modelBuilder.Entity("AWN.Models.Photos", b =>
@@ -523,7 +576,7 @@ namespace AWN.Migrations
                     b.HasOne("AWN.Models.Account", "Account")
                         .WithOne("requestJoins")
                         .HasForeignKey("AWN.Models.RequestJoin", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -533,6 +586,17 @@ namespace AWN.Migrations
                 {
                     b.HasOne("AWN.Models.Account", "Account")
                         .WithMany("suggestions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("AWN.Models.Support", b =>
+                {
+                    b.HasOne("AWN.Models.Account", "Account")
+                        .WithMany("support")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -599,10 +663,14 @@ namespace AWN.Migrations
                         .IsRequired();
 
                     b.Navigation("suggestions");
+
+                    b.Navigation("support");
                 });
 
             modelBuilder.Entity("AWN.Models.DonateCase", b =>
                 {
+                    b.Navigation("Payments");
+
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

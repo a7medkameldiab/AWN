@@ -12,5 +12,6 @@ namespace AWN.Models
         public ICollection<Notification> notifications { get; set; }
         public List<Suggestion> suggestions { get; set; }  
         public List<Payment> payments { get; set; }
+        public  List<Support> support { get; set; }
     }
 }

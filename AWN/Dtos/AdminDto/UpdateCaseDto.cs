@@ -15,5 +15,6 @@ namespace AWN.Dtos.AdminDto
         [Required]
         public DonateCaseState? State { get; set; } = DonateCaseState.InProgress;
         public List<IFormFile>? Photos { get; set; }
+        public string? Category { get; set; }
     }
 }

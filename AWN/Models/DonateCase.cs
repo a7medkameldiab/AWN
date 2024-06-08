@@ -42,5 +42,6 @@ namespace AWN.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public double ExcessAmount { get;  set; }
+        public string Category { get; set; }
     }
 }

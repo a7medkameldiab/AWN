@@ -9,6 +9,5 @@ namespace AWN.Dtos.UserDto
         public string Address { get; set; }
         public string Details { get; set; }
         public string PhoneNumber { get; set; }
-        public SuggestionSort Sort { get; set; }
     }
 }

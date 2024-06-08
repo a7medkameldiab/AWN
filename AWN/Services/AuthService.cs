@@ -60,6 +60,7 @@ namespace AWN.Services
 
             return new AuthModel
             {
+                Id = account.Id,
                 Email = account.Email,
                 UserName = account.UserName,
                 PhoneNumber = account.PhoneNumber,
@@ -85,6 +86,7 @@ namespace AWN.Services
             var jwtSecurityToken = await CreateJwtToken(user);
             var roleList = await _userManager.GetRolesAsync(user);
 
+            authModel.Id = user.Id;
             authModel.ExpireOn = jwtSecurityToken.ValidTo;
             authModel.UserName = user.UserName;
             authModel.Email = user.Email;

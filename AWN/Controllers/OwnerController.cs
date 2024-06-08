@@ -15,15 +15,63 @@ namespace AWN.Controllers
     public class OwnerController : ControllerBase
     {
         private readonly UserManager<Account> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public OwnerController(UserManager<Account> userManager)
+
+        public OwnerController(UserManager<Account> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _context = context;
+        }
+
+        [HttpGet("admins")]
+        public async Task<IActionResult> GetAllAdminsAsync()
+        {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userI = await _userManager.FindByIdAsync(userId);
+
+            if (userI is null)
+                return NotFound("This Id Is Not Found !");
+
+            var admins = await _userManager.GetUsersInRoleAsync("Admin");
+
+            if (admins == null || !admins.Any())
+            {
+                return NotFound(new { Message = "No admins found." });
+            }
+
+            var adminDtos = admins.Select(admin => new
+            {
+                admin.Id,
+                admin.UserName,
+                admin.Email,
+                admin.PhoneNumber
+            });
+
+            return Ok(adminDtos);
         }
 
         [HttpPost("add-admin")]
         public async Task<IActionResult> AddAdmin([FromForm] RegisterAdminDto model)
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userI = await _userManager.FindByIdAsync(userId);
+
+            if (userI is null)
+                return NotFound("This Id Is Not Found !");
+
             if (await _userManager.FindByEmailAsync(model.Email) is not null)
                 return BadRequest("This Email Is Already Registered , Use An Another Email !");
 
@@ -58,6 +106,18 @@ namespace AWN.Controllers
         [HttpDelete("delete-admin/{email}")]
         public async Task<IActionResult> DeleteAdmin(string email)
         {
+            var userId = User.FindFirst("uid").Value;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userI = await _userManager.FindByIdAsync(userId);
+
+            if (userI is null)
+                return NotFound("This Id Is Not Found !");
+
             var user = await _userManager.FindByEmailAsync(email);
             if (user is null)
                 return NotFound("This Email Is Not Found !");

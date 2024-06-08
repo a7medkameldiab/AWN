@@ -15,6 +15,7 @@ namespace AWN.Models
         public DbSet<Notification> notifications { get; set; }
         public DbSet<Suggestion> suggestions { get; set; }
         public DbSet<Payment> payments { get; set; }
+        public DbSet<Support> supports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,10 +42,11 @@ namespace AWN.Models
                 .Property(t => t.TimesTamp)
                 .HasDefaultValueSql("GETDATE()");
 
-            modelBuilder.Entity<Account>()
-               .HasOne(a => a.requestJoins)
-               .WithOne(r => r.Account)
-               .HasForeignKey<RequestJoin>(r => r.AccountId);
+            modelBuilder.Entity<RequestJoin>()
+               .HasOne(a => a.Account)
+               .WithOne(r => r.requestJoins)
+               .HasForeignKey<RequestJoin>(r => r.AccountId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Account>()
                 .HasMany(a => a.payments)
@@ -54,6 +56,6 @@ namespace AWN.Models
             modelBuilder.Entity<DonateCase>()
                .Property(dc => dc.ExcessAmount)
                .HasComputedColumnSql("CASE WHEN [CurrentAmount] <= [TargetAmount] THEN 0 ELSE [CurrentAmount] - [TargetAmount] END");
-        }   
+        }
     }
 }

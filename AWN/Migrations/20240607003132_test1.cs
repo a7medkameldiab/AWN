@@ -4,42 +4,42 @@
 
 namespace AWN.Migrations
 {
-    public partial class updatePayment : Migration
+    public partial class test1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Payment_Users_AccountId",
+                name: "FK_Support_Users_AccountId",
                 schema: "AwnSc",
-                table: "Payment");
+                table: "Support");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_Payment",
+                name: "PK_Support",
                 schema: "AwnSc",
-                table: "Payment");
+                table: "Support");
 
             migrationBuilder.RenameTable(
-                name: "Payment",
+                name: "Support",
                 schema: "AwnSc",
-                newName: "payments",
+                newName: "supports",
                 newSchema: "AwnSc");
 
             migrationBuilder.RenameIndex(
-                name: "IX_Payment_AccountId",
+                name: "IX_Support_AccountId",
                 schema: "AwnSc",
-                table: "payments",
-                newName: "IX_payments_AccountId");
+                table: "supports",
+                newName: "IX_supports_AccountId");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_payments",
+                name: "PK_supports",
                 schema: "AwnSc",
-                table: "payments",
+                table: "supports",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_payments_Users_AccountId",
+                name: "FK_supports_Users_AccountId",
                 schema: "AwnSc",
-                table: "payments",
+                table: "supports",
                 column: "AccountId",
                 principalSchema: "AwnSc",
                 principalTable: "Users",
@@ -50,37 +50,37 @@ namespace AWN.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_payments_Users_AccountId",
+                name: "FK_supports_Users_AccountId",
                 schema: "AwnSc",
-                table: "payments");
+                table: "supports");
 
             migrationBuilder.DropPrimaryKey(
-                name: "PK_payments",
+                name: "PK_supports",
                 schema: "AwnSc",
-                table: "payments");
+                table: "supports");
 
             migrationBuilder.RenameTable(
-                name: "payments",
+                name: "supports",
                 schema: "AwnSc",
-                newName: "Payment",
+                newName: "Support",
                 newSchema: "AwnSc");
 
             migrationBuilder.RenameIndex(
-                name: "IX_payments_AccountId",
+                name: "IX_supports_AccountId",
                 schema: "AwnSc",
-                table: "Payment",
-                newName: "IX_Payment_AccountId");
+                table: "Support",
+                newName: "IX_Support_AccountId");
 
             migrationBuilder.AddPrimaryKey(
-                name: "PK_Payment",
+                name: "PK_Support",
                 schema: "AwnSc",
-                table: "Payment",
+                table: "Support",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Payment_Users_AccountId",
+                name: "FK_Support_Users_AccountId",
                 schema: "AwnSc",
-                table: "Payment",
+                table: "Support",
                 column: "AccountId",
                 principalSchema: "AwnSc",
                 principalTable: "Users",

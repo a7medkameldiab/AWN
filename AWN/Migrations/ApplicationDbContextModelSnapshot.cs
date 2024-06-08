@@ -132,6 +132,10 @@ namespace AWN.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("CurrentAmount")
                         .HasColumnType("float");
 
@@ -341,6 +345,37 @@ namespace AWN.Migrations
                     b.ToTable("suggestions", "AwnSc");
                 });
 
+            modelBuilder.Entity("AWN.Models.Support", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Problem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("supports", "AwnSc");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -539,7 +574,7 @@ namespace AWN.Migrations
                     b.HasOne("AWN.Models.Account", "Account")
                         .WithOne("requestJoins")
                         .HasForeignKey("AWN.Models.RequestJoin", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -549,6 +584,17 @@ namespace AWN.Migrations
                 {
                     b.HasOne("AWN.Models.Account", "Account")
                         .WithMany("suggestions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("AWN.Models.Support", b =>
+                {
+                    b.HasOne("AWN.Models.Account", "Account")
+                        .WithMany("support")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -615,6 +661,8 @@ namespace AWN.Migrations
                         .IsRequired();
 
                     b.Navigation("suggestions");
+
+                    b.Navigation("support");
                 });
 
             modelBuilder.Entity("AWN.Models.DonateCase", b =>
