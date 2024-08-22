@@ -12,6 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// with media service 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IMediaSerivce, MediaService>();
+
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
 /// mapping between class jwt and its data in setting
 builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
@@ -57,6 +66,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// with media service
+app.UseRequestLocalization(options =>
+{
+    var supportedCultures = new[] { "en", "fr", "de" };
+    options.SetDefaultCulture(supportedCultures[0])
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -73,6 +91,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

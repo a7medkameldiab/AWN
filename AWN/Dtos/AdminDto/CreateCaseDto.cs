@@ -16,7 +16,7 @@ namespace AWN.Dtos.AdminDto
         [Range(0, double.MaxValue, ErrorMessage = "Target amount must be a non-negative value.")]
         public double TargetAmount { get; set; }
         public DonateCaseState State { get; set; } = DonateCaseState.InProgress;
-        public List<IFormFile> Photos { get; set; }
+        public List<IFormFile>? Photos { get; set; }
         public string Category { get; set; }
     }
 }

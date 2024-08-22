@@ -1,6 +1,7 @@
 ﻿using AWN.Dtos;
 using AWN.Dtos.UserDto;
 using AWN.Models;
+using AWN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,11 +17,54 @@ namespace AWN.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Account> _userManager;
+        private readonly IMediaSerivce _mediaService;
 
-        public GeneralController(ApplicationDbContext context, UserManager<Account> userManager)
+        public GeneralController(ApplicationDbContext context, UserManager<Account> userManager, IMediaSerivce mediaService)
         {
             _context = context;
             _userManager = userManager;
+            _mediaService = mediaService;
+        }
+
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetStatistics()
+        {
+            try
+            {
+                var userId = User.FindFirst("uid").Value;
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    return NotFound("This Id Is Not Found !");
+                }
+
+                var paymentCount = await _context.payments.CountAsync();
+                var doneCaseCount = await _context.donateCases.CountAsync(dc => dc.State == DonateCaseState.Done);
+                var collectedCaseCount = await _context.donateCases.CountAsync(dc => dc.State == DonateCaseState.Collected);
+                var inProgressCaseCount = await _context.donateCases.CountAsync(dc => dc.State == DonateCaseState.InProgress);
+
+                var statistics = new
+                {
+                    PaymentCount = paymentCount,
+                    DoneCaseCount = doneCaseCount,
+                    CollectedCaseCount = collectedCaseCount,
+                    InProgressCaseCount = inProgressCaseCount
+                };
+
+                return Ok(statistics);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("payments/{accountId}")]
@@ -92,7 +136,7 @@ namespace AWN.Controllers
                     dc.Category,
                     Photos = dc.Photos.Select(p => new
                     {
-                        p.Photo
+                        p.PhotoUrl
                     }).ToList(),
                     AccountCount = dc.Payments.Select(p => p.AccountId).Distinct().Count(),
                     PaymentCount = dc.Payments.Count(),
@@ -133,7 +177,7 @@ namespace AWN.Controllers
                   dc.Category,
                   Photos = dc.Photos.Select(p => new
                   {
-                      p.Photo
+                      p.PhotoUrl
                   }).ToList(),
                   AccountCount = dc.Payments.Select(p => p.AccountId).Distinct().Count(),
                   PaymentCount = dc.Payments.Count(),
@@ -202,11 +246,7 @@ namespace AWN.Controllers
             }
             if (model.Photo is not null)
             {
-                using var dataStream = new MemoryStream();
-
-                await model.Photo.CopyToAsync(dataStream);
-
-                account.Photo = dataStream.ToArray();
+                account.PhotoUrl = await _mediaService.AddAsync(model.Photo);
             }
 
             if (!string.IsNullOrEmpty(model.Password))

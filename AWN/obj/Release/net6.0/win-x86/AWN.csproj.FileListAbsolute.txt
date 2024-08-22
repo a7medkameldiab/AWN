@@ -244,3 +244,4 @@ E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\refint\AWN.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\AWN.pdb
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\AWN.genruntimeconfig.cache
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\ref\AWN.dll
+E:\Grinta\Graduation Project\AWN\AWN\bin\Release\net6.0\win-x86\microsoft.identitymodel.dll

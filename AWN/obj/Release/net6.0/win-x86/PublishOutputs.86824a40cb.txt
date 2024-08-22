@@ -36,6 +36,7 @@ E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Micro
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.Extensions.Identity.Core.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.Extensions.Identity.Stores.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.Identity.Client.dll
+E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\microsoft.identitymodel.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.IdentityModel.Abstractions.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.IdentityModel.JsonWebTokens.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.IdentityModel.Logging.dll

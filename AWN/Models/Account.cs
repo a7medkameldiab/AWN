@@ -6,7 +6,7 @@ namespace AWN.Models
     public class Account : IdentityUser
     {
         public string? DonationNumber { get; set; }
-        public byte[]? Photo { get; set; }
+        public string? PhotoUrl { get; set; }
         public ICollection<DonateCase> donateCases { get; set; }
         public RequestJoin requestJoins { get; set; }
         public ICollection<Notification> notifications { get; set; }

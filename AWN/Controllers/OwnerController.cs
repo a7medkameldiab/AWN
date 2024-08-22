@@ -1,11 +1,13 @@
 ﻿using AWN.Dtos;
 using AWN.Dtos.AdminDto;
 using AWN.Models;
+using AWN.Services;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace AWN.Controllers
 {
@@ -16,12 +18,14 @@ namespace AWN.Controllers
     {
         private readonly UserManager<Account> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IMediaSerivce _mediaService;
 
 
-        public OwnerController(UserManager<Account> userManager, ApplicationDbContext context)
+        public OwnerController(UserManager<Account> userManager, ApplicationDbContext context, IMediaSerivce mediaService)
         {
             _userManager = userManager;
             _context = context;
+            _mediaService = mediaService;
         }
 
         [HttpGet("admins")]
@@ -85,11 +89,7 @@ namespace AWN.Controllers
 
             if (model.Photo is not null)
             {
-                using var dataStream = new MemoryStream();
-
-                await model.Photo.CopyToAsync(dataStream);
-
-                user.Photo = dataStream.ToArray();
+                user.PhotoUrl = await _mediaService.AddAsync(model.Photo);
             }
 
             var result = await _userManager.CreateAsync(user, model.Password);

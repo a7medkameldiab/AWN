@@ -1,5 +1,6 @@
 ﻿using AWN.Dtos.AdminDto;
 using AWN.Models;
+using AWN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,11 +18,13 @@ namespace AWN.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Account> _userManager;
+        private readonly IMediaSerivce _mediaService;
 
-        public AdminController(ApplicationDbContext context, UserManager<Account> userManager)
+        public AdminController(ApplicationDbContext context, UserManager<Account> userManager, IMediaSerivce mediaService)
         {
             _context = context;
             _userManager = userManager;
+            _mediaService = mediaService;
         }
 
         [HttpGet("supports")]
@@ -173,7 +176,7 @@ namespace AWN.Controllers
                     dc.Category,
                     Photos = dc.Photos.Select(p => new
                     {
-                        p.Photo
+                        p.PhotoUrl
                     }).ToList(),
                     AccountCount = dc.Payments.Select(p => p.AccountId).Distinct().Count(),
                     PaymentCount = dc.Payments.Count(),
@@ -213,28 +216,35 @@ namespace AWN.Controllers
 
             await _context.SaveChangesAsync();
             user.donateCases = new List<DonateCase>(){donateCase};
-
-            var photos = new List<Photos>();
-
-            foreach (var formFile in dto.Photos)
+            if (dto.Photos is not null)
             {
-                if (formFile.Length > 0)
+                try
                 {
-                    using (var memoryStream = new MemoryStream())
+                    var photos = new List<Photos>();
+
+                    foreach (var formFile in dto.Photos)
                     {
-                        await formFile.CopyToAsync(memoryStream);
-                        var data = memoryStream.ToArray();
-                        photos.Add(new Photos
+                        if (formFile.Length > 0)
                         {
-                            Photo = data,
-                            DonateCase = donateCase
-                        });
+                            var photoUrl = await _mediaService.AddAsync(formFile);
+                            if (photoUrl != null)
+                            {
+                                photos.Add(new Photos
+                                {
+                                    PhotoUrl = photoUrl,
+                                    DonateCase = donateCase
+                                });
+                            }
+                        }
                     }
+
+                    donateCase.Photos = photos;
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, "Server Error");
                 }
             }
-
-            donateCase.Photos = photos;
-
             _context.donateCases.Add(donateCase);
             await _context.SaveChangesAsync();
 
@@ -328,13 +338,12 @@ namespace AWN.Controllers
                 {
                     if (formFile.Length > 0)
                     {
-                        using (var memoryStream = new MemoryStream())
+                       var photoUrl = await _mediaService.AddAsync(formFile);
+                        if (photoUrl != null)
                         {
-                            await formFile.CopyToAsync(memoryStream);
-                            var data = memoryStream.ToArray();
                             photos.Add(new Photos
                             {
-                                Photo = data,
+                                PhotoUrl = photoUrl,
                                 DonateCase = donateCase
                             });
                         }

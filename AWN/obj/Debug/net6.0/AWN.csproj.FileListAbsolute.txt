@@ -255,3 +255,4 @@ E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\netstanda
 E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 E:\Grinta\Graduation Project\AWN\AWN\obj\Debug\net6.0\AWN.sourcelink.json
+E:\Grinta\Graduation Project\AWN\AWN\bin\Debug\net6.0\microsoft.identitymodel.dll

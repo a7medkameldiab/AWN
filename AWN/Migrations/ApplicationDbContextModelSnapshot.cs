@@ -98,8 +98,8 @@ namespace AWN.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("Photo")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -246,9 +246,9 @@ namespace AWN.Migrations
                     b.Property<int>("DonateCaseId")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Photo")
+                    b.Property<string>("PhotoUrl")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
